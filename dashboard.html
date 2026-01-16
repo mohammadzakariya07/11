@@ -271,38 +271,7 @@ function freshApply() {
 /* ===============================
    DOCUMENT UPLOAD STEP
 ================================ */
-<script>
 function nextStep() {
-  // Reset previously collected data
-  collectedData = {};
-
-  // Select all inputs inside popup body
-  const fields = document.querySelectorAll(
-    "#popupBody input, #popupBody textarea, #popupBody select"
-  );
-
-  fields.forEach((el) => {
-    // Handle checkboxes (biometrics)
-    if (el.type === "checkbox") {
-      if (!collectedData.biometrics) {
-        collectedData.biometrics = [];
-      }
-      if (el.checked) {
-        collectedData.biometrics.push(el.value || el.nextSibling.textContent.trim());
-      }
-    }
-    // Handle normal inputs, textarea, select
-    else {
-      const key =
-        el.previousSibling && el.previousSibling.nodeType === 3
-          ? el.previousSibling.textContent.replace(":", "").trim()
-          : el.name || el.id || "field";
-
-      collectedData[key] = el.value;
-    }
-  });
-
-  // Move to document upload step
   document.getElementById("popupBody").innerHTML = `
     <h4>Upload Required Documents</h4>
     <p>Upload Address Proof / ID Proof (Single PDF)</p>
@@ -310,7 +279,6 @@ function nextStep() {
     <button onclick="submitApplication()">Submit Application</button>
   `;
 }
-</script>
 
 /* ===============================
    SAVE TO GOOGLE SHEET
