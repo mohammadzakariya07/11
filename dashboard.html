@@ -10,31 +10,25 @@
       background: #eef2f5;
       padding: 20px;
     }
-
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
     #timer {
-      margin-right: 10px;
-      color: #555;
       font-size: 14px;
+      color: #555;
     }
-
     button {
       padding: 8px 14px;
       margin: 5px;
       cursor: pointer;
     }
-
     .logout-btn {
       background: #c62828;
       color: white;
       border: none;
     }
-
     .card {
       background: white;
       padding: 20px;
@@ -43,24 +37,15 @@
       cursor: pointer;
       box-shadow: 0 0 6px rgba(0,0,0,0.2);
     }
-
-    .card:hover {
-      background: #f4f8ff;
-    }
-
     #updateOptions {
       display: none;
-      margin-top: 20px;
     }
-
-    /* Popup */
     #popup {
       display: none;
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.5);
     }
-
     .popup-box {
       background: white;
       width: 460px;
@@ -68,7 +53,6 @@
       padding: 20px;
       border-radius: 8px;
     }
-
     .popup-box input,
     .popup-box textarea,
     .popup-box select {
@@ -76,7 +60,6 @@
       padding: 6px;
       margin-top: 6px;
     }
-
     footer {
       margin-top: 40px;
       text-align: center;
@@ -88,7 +71,6 @@
 
 <body onload="checkSession()">
 
-<!-- Top Bar -->
 <div class="top-bar">
   <h2>Smart Aadhaar Center Monitoring System</h2>
   <div>
@@ -99,33 +81,21 @@
 
 <hr>
 
-<!-- Main Options -->
 <div id="mainOptions">
-  <div class="card" onclick="showUpdateOptions()">
-    Update Aadhaar Card
-  </div>
-
-  <div class="card" onclick="freshApply()">
-    Fresh Aadhaar Apply
-  </div>
+  <div class="card" onclick="showUpdateOptions()">Update Aadhaar Card</div>
+  <div class="card" onclick="freshApply()">Fresh Aadhaar Apply</div>
 </div>
 
-<!-- Update Aadhaar Options -->
 <div id="updateOptions">
   <h3>Select Aadhaar Update Type</h3>
-
-  <button onclick="openUpdateForm('name')">1. Update Name</button><br>
-  <button onclick="openUpdateForm('gender')">2. Update Gender</button><br>
-  <button onclick="openUpdateForm('address')">3. Update Address</button><br>
-  <button onclick="openUpdateForm('mobile')">4. Update Mobile Number</button><br>
-  <button onclick="openUpdateForm('email')">5. Update Email ID</button><br>
-  <button onclick="openUpdateForm('biometric')">6. Update Biometrics</button><br>
-  <button onclick="openUpdateForm('combined')">
-    7. Update Address + Mobile + Email + Biometrics
-  </button>
+  <button onclick="openUpdateForm('name')">Update Name</button>
+  <button onclick="openUpdateForm('gender')">Update Gender</button>
+  <button onclick="openUpdateForm('address')">Update Address</button>
+  <button onclick="openUpdateForm('mobile')">Update Mobile</button>
+  <button onclick="openUpdateForm('email')">Update Email</button>
+  <button onclick="openUpdateForm('biometric')">Update Biometrics</button>
 </div>
 
-<!-- Popup -->
 <div id="popup">
   <div class="popup-box">
     <h3 id="popupTitle"></h3>
@@ -137,26 +107,20 @@
 </div>
 
 <footer>
-  Designed & Developed by <b>Mohammad Zakariya</b><br>
-  <a href="mailto:mzakariya0007@gmail.com">mzakariya0007@gmail.com</a>
+  Designed & Developed by <b>Mohammad Zakariya</b>
 </footer>
 
-<!-- Session logic -->
 <script src="dashboard.js"></script>
 
 <script>
-/* ===============================
-   CONFIG
-================================ */
+/* ================= CONFIG ================= */
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbxRffghkixlECYJ6JGGAUFULLCvuIwtJAUKphFgvcczYBx_1bX-5ov9SO_JbU6r6_TL/exec";
 
 let collectedData = {};
 let serviceType = "";
 
-/* ===============================
-   UPDATE AADHAAR FLOW
-================================ */
+/* ================= UPDATE FLOW ================= */
 function showUpdateOptions() {
   document.getElementById("mainOptions").style.display = "none";
   document.getElementById("updateOptions").style.display = "block";
@@ -165,60 +129,50 @@ function showUpdateOptions() {
 function openUpdateForm(type) {
   serviceType = "Update Aadhaar";
   collectedData.updateType = type;
-
   document.getElementById("popup").style.display = "block";
 
-  let title = "";
   let html = "";
+  let title = "";
 
   if (type === "name") {
     title = "Update Name";
     html = `
-      Current Name:<input id="old"><br>
-      Updated Name:<input id="new">
+      Current Name:<input id="currentName">
+      Updated Name:<input id="updatedName">
     `;
   }
-
   if (type === "gender") {
     title = "Update Gender";
     html = `
-      Current Gender:
-      <select id="old">
-        <option>Male</option><option>Female</option>
-        <option>Transgender</option><option>Other</option>
-      </select><br><br>
-      Updated Gender:
-      <select id="new">
-        <option>Male</option><option>Female</option>
-        <option>Transgender</option><option>Other</option>
+      Current Gender:<select id="currentGender">
+        <option>Male</option><option>Female</option><option>Other</option>
+      </select>
+      Updated Gender:<select id="updatedGender">
+        <option>Male</option><option>Female</option><option>Other</option>
       </select>
     `;
   }
-
   if (type === "address") {
     title = "Update Address";
     html = `
-      Current Address:<textarea id="old"></textarea>
-      Updated Address:<textarea id="new"></textarea>
+      Current Address:<textarea id="currentAddress"></textarea>
+      Updated Address:<textarea id="updatedAddress"></textarea>
     `;
   }
-
   if (type === "mobile") {
-    title = "Update Mobile Number";
+    title = "Update Mobile";
     html = `
-      Current Mobile (or N):<input id="old">
-      Updated Mobile:<input id="new">
+      Current Mobile:<input id="currentMobile">
+      Updated Mobile:<input id="updatedMobile">
     `;
   }
-
   if (type === "email") {
-    title = "Update Email ID";
+    title = "Update Email";
     html = `
-      Current Email (or N):<input id="old">
-      Updated Email:<input id="new">
+      Current Email:<input id="currentEmail">
+      Updated Email:<input id="updatedEmail">
     `;
   }
-
   if (type === "biometric") {
     title = "Update Biometrics";
     html = `
@@ -228,61 +182,51 @@ function openUpdateForm(type) {
     `;
   }
 
-  if (type === "combined") {
-    title = "Update Multiple Details";
-    html = `
-      Updated Address:<textarea></textarea>
-      Updated Mobile:<input>
-      Updated Email:<input>
-      Biometrics:
-      <input type="checkbox">Fingerprint
-      <input type="checkbox">Photo
-      <input type="checkbox">Iris
-    `;
-  }
-
   document.getElementById("popupTitle").innerText = title;
   document.getElementById("popupBody").innerHTML = html;
 }
 
-/* ===============================
-   FRESH AADHAAR APPLY
-================================ */
+/* ================= FRESH APPLY ================= */
 function freshApply() {
   serviceType = "Fresh Aadhaar";
   document.getElementById("popup").style.display = "block";
-
-  document.getElementById("popupTitle").innerText =
-    "Fresh Aadhaar Application";
-
+  document.getElementById("popupTitle").innerText = "Fresh Aadhaar Application";
   document.getElementById("popupBody").innerHTML = `
-    Name:<input><br>
-    Gender:
-    <select>
-      <option>Male</option><option>Female</option>
-      <option>Transgender</option><option>Other</option>
-    </select><br>
-    Address:<textarea></textarea>
-    Mobile:<input>
-    Email:<input>
+    Name:<input id="name">
+    Gender:<select id="gender">
+      <option>Male</option><option>Female</option><option>Other</option>
+    </select>
+    Address:<textarea id="address"></textarea>
+    Mobile:<input id="mobile">
+    Email:<input id="email">
   `;
 }
 
-/* ===============================
-   DOCUMENT UPLOAD STEP
-================================ */
+/* ================= NEXT STEP (FIXED) ================= */
 function nextStep() {
+  collectedData = collectedData || {};
+
+  const fields = document.querySelectorAll(
+    "#popupBody input, #popupBody textarea, #popupBody select"
+  );
+
+  fields.forEach(el => {
+    if (el.type === "checkbox") {
+      if (!collectedData.biometrics) collectedData.biometrics = [];
+      if (el.checked) collectedData.biometrics.push(el.value);
+    } else {
+      collectedData[el.id] = el.value;
+    }
+  });
+
   document.getElementById("popupBody").innerHTML = `
     <h4>Upload Required Documents</h4>
-    <p>Upload Address Proof / ID Proof (Single PDF)</p>
     <input type="file" accept="application/pdf"><br><br>
     <button onclick="submitApplication()">Submit Application</button>
   `;
 }
 
-/* ===============================
-   SAVE TO GOOGLE SHEET
-================================ */
+/* ================= SUBMIT ================= */
 function submitApplication() {
   fetch(SCRIPT_URL, {
     method: "POST",
@@ -291,12 +235,9 @@ function submitApplication() {
   })
   .then(() => {
     alert("Application submitted successfully");
-    closePopup();
     location.reload();
   })
-  .catch(() => {
-    alert("Error submitting application");
-  });
+  .catch(() => alert("Submission error"));
 }
 
 function closePopup() {
